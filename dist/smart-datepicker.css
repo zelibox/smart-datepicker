@@ -1,0 +1,23 @@
+.smart-datepicker {
+    border: 1px solid #A9A9A9;
+    display: inline-block;
+    height: 24px;
+    padding: 2px;
+    vertical-align: top; /*remove this*/
+    font-size: 0;
+}
+
+.smart-datepicker.smart-datepicker-focus {
+    outline: #3D585D auto 5px;
+}
+.smart-datepicker .smart-datepicker-input {
+    display: inline-block;
+    height: 100%;
+    padding: 2px;
+    font: normal normal normal 13.3333330154419px/normal monospace;
+}
+
+.smart-datepicker .smart-datepicker-input:focus {
+    background: #b5d5ff;
+    outline: 0;
+}
