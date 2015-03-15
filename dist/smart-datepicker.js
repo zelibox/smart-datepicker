@@ -1,1 +1,1 @@
-angular.module('smartDatepicker')
+angular.module('smartDatepicker', []);

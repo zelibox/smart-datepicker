@@ -1,0 +1,45 @@
+html {
+    box-sizing: border-box;
+}
+
+*, :after, :before {
+    box-sizing: inherit;
+}
+
+body {
+    background-color: #F7F7F7;
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    margin: 0;
+}
+
+header {
+    padding: 10px 0px;
+    background: #fff;
+    border-bottom: 1px solid #DDDDDD;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+}
+
+header h1 {
+    color: #333;
+    text-shadow: 1px 1px 0 #fff;
+    margin: 0;
+}
+
+.container {
+    width: 850px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.content {
+    background: #fff;
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.05);
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    padding: 2em 2em 7em;
+    z-index: 1;
+}
