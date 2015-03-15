@@ -9,7 +9,7 @@ angular.module('smartDatepicker', [])
                 type: '@',
                 model: '='
             },
-            template: '<div ng-class="{\'smart-datepicker-focus\': isFocus}" class="smart-datepicker">' +
+            template: '<div ng-click="click()" ng-class="{\'smart-datepicker-focus\': isFocus}" class="smart-datepicker">' +
             '   <div tabindex="0" ng-blur="blur()" ng-focus="focus()" class="smart-datepicker-input smart-datepicker-input-day">дд</div>.' +
             '   <div tabindex="0" ng-blur="blur()" ng-focus="focus()" class="smart-datepicker-input smart-datepicker-input-month">мм</div>.' +
             '   <div tabindex="0" ng-blur="blur()" ng-focus="focus()" class="smart-datepicker-input smart-datepicker-input-year">гггг</div>,' +
@@ -24,6 +24,13 @@ angular.module('smartDatepicker', [])
                 $scope.blur = function () {
                     $scope.isFocus = false;
                 };
+                $scope.click = function () {
+                    if(!$scope.isFocus) {
+                        ///console.log(angular.element($element).find('.smart-datepicker-input-day').eq(0));
+                       $element.find('.smart-datepicker-input-day').eq(0).focus();
+                    }
+                };
+
 
                 /*console.log( $element.find('.smart-datepicker-input').size());
                 $element.find('.smart-datepicker-input').on('focusin', function() {
