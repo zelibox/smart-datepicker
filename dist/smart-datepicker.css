@@ -5,13 +5,22 @@
     padding: 2px;
     vertical-align: top; /*remove this*/
     font-size: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 .smart-datepicker.smart-datepicker-focus {
     box-shadow: 0px 0px 1px 0px #3D585D;
 }
+
 .smart-datepicker .smart-datepicker-input {
     display: inline-block;
+    position: relative;
     height: 100%;
     padding: 2px;
     font: normal normal normal 13.3333330154419px/normal monospace;
@@ -20,4 +29,22 @@
 .smart-datepicker .smart-datepicker-input:focus {
     background: #b5d5ff;
     outline: 0;
+}
+
+.smart-datepicker .smart-datepicker-input{
+    margin-right: 7px;
+}
+.smart-datepicker .smart-datepicker-input:last-child{
+    margin-right: 0;
+}
+
+.smart-datepicker .smart-datepicker-input-day:after, .smart-datepicker .smart-datepicker-input-month:after {
+    content: '.';
+    position: absolute;
+    left: 100%;
+}
+.smart-datepicker .smart-datepicker-input-hour:after {
+    content: ':';
+    position: absolute;
+    left: 100%;
 }
