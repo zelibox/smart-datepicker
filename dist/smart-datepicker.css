@@ -8,7 +8,7 @@
 }
 
 .smart-datepicker.smart-datepicker-focus {
-    outline: #3D585D auto 5px;
+    box-shadow: 0px 0px 1px 0px #3D585D;
 }
 .smart-datepicker .smart-datepicker-input {
     display: inline-block;
