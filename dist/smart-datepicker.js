@@ -37,6 +37,7 @@ angular.module('smartDatepicker', [])
                         },
                         onWrite: function(numeric, firstContact) {
                             // todo write
+                            // todo focus
                         },
                         view: function () {
                             if (this.current) {
