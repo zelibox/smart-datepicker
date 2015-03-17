@@ -15,6 +15,7 @@
 }
 .smart-datepicker .smart-datepicker-changer {
     display: inline-block;
+    vertical-align: baseline;
 }
 .smart-datepicker .smart-datepicker-changer div {
     display: inline-block;
@@ -36,6 +37,19 @@
     background: #b5d5ff;
 }
 
-.smart-datepicker .smart-datepicker-changer:last-child{
-    margin-right: 0;
+.smart-datepicker .smart-datepicker-clear {
+    opacity: 0;
+    display: inline-block;
+    width: 10px;
+    height: 100%;
+    font-size: 1rem;
+    color: #3D62A3;
+    padding: 1px;
+    font-weight: bold;
+    vertical-align: top;
+    float: right;
+    margin: 0 2px;
+}
+.smart-datepicker:hover .smart-datepicker-clear, .smart-datepicker:focus .smart-datepicker-clear {
+    opacity: 1;
 }

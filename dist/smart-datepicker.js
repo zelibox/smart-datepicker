@@ -17,6 +17,11 @@ angular.module('smartDatepicker', [])
             '            ng-mousedown="setFocusChanger(changer)"></div>' +
             '       <span ng-if="changers[changer].after" ng-bind="changers[changer].after"></span>' +
             '   </div>' +
+            '   <div ng-click="clear()" class="smart-datepicker-clear">&times;</div>' +
+            '   <div class="smart-datepicker-switch">' +
+            '       <div class="smart-datepicker-increment"></div>' +
+            '       <div class="smart-datepicker-decrement"></div>' +
+            '   </div>' +
             '</div>',
             link: function ($scope, $element) {
                 $scope.isFocus = false;
@@ -274,20 +279,29 @@ angular.module('smartDatepicker', [])
                     $scope.setFocusChanger(null);
                 };
 
+                $scope.clear = function () {
+                    angular.forEach($scope.activeChangers, function(typeChanger) {
+                        $scope.changers[typeChanger].current = null;
+                    });
+                };
+
                 $scope.keydown = function (event) {
                     console.log('keydown: ', event.which);
                     switch (event.which) {
                         case 38: // up
                             $scope.changers[changer].onUp();
+                            event.preventDefault();
                             break;
                         case 40: // down
                             $scope.changers[changer].onDown();
+                            event.preventDefault();
                             break;
                         case 37: //left
                             (function(){
                                 var index = $scope.activeChangers.indexOf(changer);
                                 if(angular.isDefined($scope.activeChangers[index - 1])) {
                                     $scope.setFocusChanger($scope.activeChangers[index - 1]);
+                                    event.preventDefault();
                                 }
                             })();
                             break;
@@ -296,6 +310,7 @@ angular.module('smartDatepicker', [])
                                 var index = $scope.activeChangers.indexOf(changer);
                                 if(angular.isDefined($scope.activeChangers[index + 1])) {
                                     $scope.setFocusChanger($scope.activeChangers[index + 1]);
+                                    event.preventDefault();
                                 }
                             })();
                             break;
