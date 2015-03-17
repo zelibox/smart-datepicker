@@ -119,7 +119,7 @@ angular.module('smartDatepicker', [])
                         },
                         after: '.',
                         placeholder: 'мм',
-                        current: 0
+                        current: null
                     },
                     year: {
                         onUp: function () {
