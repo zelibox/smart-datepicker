@@ -1,5 +1,5 @@
 angular.module('smartDatepicker', [])
-    .directive('smartDatepicker', function () {
+    .directive('smartDatepicker', function ($interval) {
         return {
             restrict: 'E',
             replace: true,
@@ -17,11 +17,11 @@ angular.module('smartDatepicker', [])
             '            ng-mousedown="setFocusChanger(changer)"></div>' +
             '       <span ng-if="changers[changer].after" ng-bind="changers[changer].after"></span>' +
             '   </div>' +
-            '   <div ng-click="clear()" class="smart-datepicker-clear">&times;</div>' +
             '   <div class="smart-datepicker-switch">' +
-            '       <div class="smart-datepicker-increment"></div>' +
-            '       <div class="smart-datepicker-decrement"></div>' +
+            '       <div ng-mousedown="increment()" ng-mouseleave="stopIncrement()" ng-mouseup="stopIncrement()" class="smart-datepicker-increment"></div>' +
+            '       <div ng-mousedown="decrement()" ng-mouseleave="stopDecrement()" ng-mouseup="stopDecrement()" class="smart-datepicker-decrement"></div>' +
             '   </div>' +
+            '   <div ng-click="clear()" class="smart-datepicker-clear">&times;</div>' +
             '</div>',
             link: function ($scope, $element) {
                 $scope.isFocus = false;
@@ -51,17 +51,17 @@ angular.module('smartDatepicker', [])
                                 this.current -= 1;
                             }
                         },
-                        onWrite: function(numeric) {
-                            if(!numeric && firstContact) {
+                        onWrite: function (numeric) {
+                            if (!numeric && firstContact) {
                                 return true;
                             }
-                            if(firstContact) {
+                            if (firstContact) {
                                 this.current = numeric;
                                 if (numeric > 3) {
                                     return false;
                                 }
                             } else {
-                                if((this.current + '' + numeric) > 31) {
+                                if ((this.current + '' + numeric) > 31) {
                                     this.current = 31;
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
@@ -96,17 +96,17 @@ angular.module('smartDatepicker', [])
                                 this.current -= 1;
                             }
                         },
-                        onWrite: function(numeric) {
-                            if(!numeric && firstContact) {
+                        onWrite: function (numeric) {
+                            if (!numeric && firstContact) {
                                 return true;
                             }
-                            if(firstContact) {
+                            if (firstContact) {
                                 this.current = numeric;
                                 if (numeric > 1) {
                                     return false;
                                 }
                             } else {
-                                if((this.current + '' + numeric) > 12) {
+                                if ((this.current + '' + numeric) > 12) {
                                     this.current = 12;
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
@@ -149,19 +149,19 @@ angular.module('smartDatepicker', [])
                             }
                             return this.placeholder;
                         },
-                        onWrite: function(numeric) {
-                            if(!numeric && firstContact) {
+                        onWrite: function (numeric) {
+                            if (!numeric && firstContact) {
                                 return true;
                             }
-                            if(firstContact) {
+                            if (firstContact) {
                                 this.current = numeric;
                             } else {
-                                if((this.current + '' + numeric) > 9999) {
+                                if ((this.current + '' + numeric) > 9999) {
                                     this.current = 9999;
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
                                 }
-                                if(this.current > 999) {
+                                if (this.current > 999) {
                                     return false;
                                 }
                             }
@@ -192,14 +192,14 @@ angular.module('smartDatepicker', [])
                             }
                             return this.placeholder;
                         },
-                        onWrite: function(numeric) {
-                            if(firstContact) {
+                        onWrite: function (numeric) {
+                            if (firstContact) {
                                 this.current = numeric;
                                 if (numeric > 2) {
                                     return false;
                                 }
                             } else {
-                                if((this.current + '' + numeric) > 23) {
+                                if ((this.current + '' + numeric) > 23) {
                                     this.current = 23;
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
@@ -234,15 +234,15 @@ angular.module('smartDatepicker', [])
                             }
                             return this.placeholder;
                         },
-                        onWrite: function(numeric) {
-                            if(firstContact) {
+                        onWrite: function (numeric) {
+                            if (firstContact) {
                                 this.current = numeric;
                                 if (numeric > 5) {
                                     firstContact = true;
                                     return false;
                                 }
                             } else {
-                                if((this.current + '' + numeric) > 59) {
+                                if ((this.current + '' + numeric) > 59) {
                                     this.current = 59;
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
@@ -269,7 +269,7 @@ angular.module('smartDatepicker', [])
 
                 $scope.focus = function () {
                     $scope.isFocus = true;
-                    if(!changer) {
+                    if (!changer) {
                         $scope.setFocusChanger($scope.activeChangers[0]);
                     }
                 };
@@ -280,9 +280,53 @@ angular.module('smartDatepicker', [])
                 };
 
                 $scope.clear = function () {
-                    angular.forEach($scope.activeChangers, function(typeChanger) {
+                    angular.forEach($scope.activeChangers, function (typeChanger) {
                         $scope.changers[typeChanger].current = null;
                     });
+                };
+
+                var incrementInterval = null;
+                var countIncrementInterval = 0;
+                $scope.increment = function () {
+                    $scope.focus();
+                    $scope.changers[changer].onUp();
+                    incrementInterval = $interval(function () {
+                        if(!changer) {
+                            $scope.stopIncrement();
+                            return;
+                        }
+                        if (countIncrementInterval > 5) {
+                            $scope.changers[changer].onUp();
+                        }
+                        countIncrementInterval++;
+                    }, 60)
+                };
+                $scope.stopIncrement = function () {
+                    $interval.cancel(incrementInterval);
+                    incrementInterval = null;
+                    countIncrementInterval = 0;
+                };
+
+                var decrementInterval = null;
+                var countDecrementInterval = 0;
+                $scope.decrement = function () {
+                    $scope.focus();
+                    $scope.changers[changer].onDown();
+                    decrementInterval = $interval(function () {
+                        if(!changer) {
+                            $scope.stopIncrement();
+                            return;
+                        }
+                        if (countDecrementInterval > 5) {
+                            $scope.changers[changer].onDown();
+                        }
+                        countDecrementInterval++;
+                    }, 60)
+                };
+                $scope.stopDecrement = function () {
+                    $interval.cancel(decrementInterval);
+                    incrementInterval = null;
+                    countDecrementInterval = 0;
                 };
 
                 $scope.keydown = function (event) {
@@ -297,18 +341,18 @@ angular.module('smartDatepicker', [])
                             event.preventDefault();
                             break;
                         case 37: //left
-                            (function(){
+                            (function () {
                                 var index = $scope.activeChangers.indexOf(changer);
-                                if(angular.isDefined($scope.activeChangers[index - 1])) {
+                                if (angular.isDefined($scope.activeChangers[index - 1])) {
                                     $scope.setFocusChanger($scope.activeChangers[index - 1]);
                                     event.preventDefault();
                                 }
                             })();
                             break;
                         case 39: //right
-                            (function(){
+                            (function () {
                                 var index = $scope.activeChangers.indexOf(changer);
-                                if(angular.isDefined($scope.activeChangers[index + 1])) {
+                                if (angular.isDefined($scope.activeChangers[index + 1])) {
                                     $scope.setFocusChanger($scope.activeChangers[index + 1]);
                                     event.preventDefault();
                                 }
@@ -319,18 +363,18 @@ angular.module('smartDatepicker', [])
                             $scope.changers[changer].current = null;
                             break;
                         case 9: // tab
-                            if(event.shiftKey) {
-                                (function(){
+                            if (event.shiftKey) {
+                                (function () {
                                     var index = $scope.activeChangers.indexOf(changer);
-                                    if(angular.isDefined($scope.activeChangers[index - 1])) {
+                                    if (angular.isDefined($scope.activeChangers[index - 1])) {
                                         $scope.setFocusChanger($scope.activeChangers[index - 1]);
                                         event.preventDefault();
                                     }
                                 })();
                             } else {
-                                (function(){
+                                (function () {
                                     var index = $scope.activeChangers.indexOf(changer);
-                                    if(angular.isDefined($scope.activeChangers[index + 1])) {
+                                    if (angular.isDefined($scope.activeChangers[index + 1])) {
                                         $scope.setFocusChanger($scope.activeChangers[index + 1]);
                                         event.preventDefault();
                                     }
@@ -359,11 +403,11 @@ angular.module('smartDatepicker', [])
                                 });
                                 return numeric;
                             })(event.which);
-                            if(numeric !== false) {
-                                if(!$scope.changers[changer].onWrite(numeric)) {
-                                    (function(){
+                            if (numeric !== false) {
+                                if (!$scope.changers[changer].onWrite(numeric)) {
+                                    (function () {
                                         var index = $scope.activeChangers.indexOf(changer);
-                                        if(angular.isDefined($scope.activeChangers[index + 1])) {
+                                        if (angular.isDefined($scope.activeChangers[index + 1])) {
                                             $scope.setFocusChanger($scope.activeChangers[index + 1]);
                                         }
                                     })();
