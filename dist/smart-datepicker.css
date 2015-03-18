@@ -56,6 +56,9 @@
 .smart-datepicker:hover .smart-datepicker-clear, .smart-datepicker:focus .smart-datepicker-clear {
     opacity: 1;
 }
+.smart-datepicker.smart-datepicker-empty .smart-datepicker-clear{
+    opacity: 0;
+}
 
 .smart-datepicker .smart-datepicker-switch {
     opacity: 0;
