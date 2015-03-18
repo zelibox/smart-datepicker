@@ -24,6 +24,28 @@ angular.module('smartDatepicker', [])
             '   <div ng-click="clear()" class="smart-datepicker-clear">&times;</div>' +
             '</div>',
             link: function ($scope) {
+                var step = 60;
+                $scope.$watch('step', function (newStep) {
+                    $scope.activeChangers = ['day', 'month', 'year'];
+                    /*step = (angular.isNumber(newStep) && (newStep >= 0.001)) ? newStep : 86400;
+                    var c = Math.floor(newStep);
+                    var d = (newStep - Math.floor(c)).toFixed(3);
+                    if(c % 3600) {
+                        $scope.activeChangers.push('hour');
+                        $scope.activeChangers.push('minute');
+                    } else
+                    if (d * 1) {
+                        $scope.activeChangers.push('hour');
+                        $scope.activeChangers.push('minute');
+                        $scope.activeChangers.push('second');
+                        $scope.activeChangers.push('millisecond')
+                    } else if (c % 60) {
+                        $scope.activeChangers.push('hour');
+                        $scope.activeChangers.push('minute');
+                        $scope.activeChangers.push('second')
+                    }*/
+
+                });
                 var isFocus = false;
                 $scope.activeChangers = [
                     'day',
