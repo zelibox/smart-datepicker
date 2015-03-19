@@ -24,38 +24,26 @@ angular.module('smartDatepicker', [])
             '   <div ng-click="clear()" class="smart-datepicker-clear">&times;</div>' +
             '</div>',
             link: function ($scope) {
-                var step = 60;
+                var step = 86400;
                 $scope.$watch('step', function (newStep) {
                     $scope.activeChangers = ['day', 'month', 'year'];
-                    /*step = (angular.isNumber(newStep) && (newStep >= 0.001)) ? newStep : 86400;
-                    var c = Math.floor(newStep);
-                    var d = (newStep - Math.floor(c)).toFixed(3);
-                    if(c % 3600) {
-                        $scope.activeChangers.push('hour');
-                        $scope.activeChangers.push('minute');
-                    } else
-                    if (d * 1) {
+                    step = (angular.isNumber(newStep) && (newStep >= 0.001)) ? newStep : 86400;
+                    if (Math.floor(step) !== step) {
                         $scope.activeChangers.push('hour');
                         $scope.activeChangers.push('minute');
                         $scope.activeChangers.push('second');
                         $scope.activeChangers.push('millisecond')
-                    } else if (c % 60) {
+                    } else if (step % 60) {
                         $scope.activeChangers.push('hour');
                         $scope.activeChangers.push('minute');
-                        $scope.activeChangers.push('second')
-                    }*/
-
+                        $scope.activeChangers.push('second');
+                    } else if ((step % 3600) || (step % 86400)) {
+                        $scope.activeChangers.push('hour');
+                        $scope.activeChangers.push('minute');
+                    }
                 });
                 var isFocus = false;
-                $scope.activeChangers = [
-                    'day',
-                    'month',
-                    'year',
-                    'hour',
-                    'minute',
-                    'second',
-                    'millisecond'
-                ];
+                $scope.activeChangers = [];
 
                 var changer = null;
                 var firstContact = true;
