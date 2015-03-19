@@ -9,19 +9,22 @@ angular.module('smartDatepicker', [])
                 step: '=',
                 model: '='
             },
-            template: '<div ng-focus="focus()" ng-blur="blur()" ng-keydown="keydown($event)" tabindex="0" ng-class="{\'smart-datepicker-empty\': isEmpty()}" class="smart-datepicker">' +
+            template: '<div ng-focus="focus()" ng-blur="blur()" ng-keydown="keydown($event)" tabindex="-1" ng-class="{\'smart-datepicker-empty\': isEmpty()}" class="smart-datepicker">' +
             '   <div class="smart-datepicker-changer {{ \'smart-datepicker-changer-\' + changer }}"  ' +
-            '        ng-class="{\'smart-datepicker-changer-focus\' :isFocusChanger(changer)}" ' +
+            '        ng-class="{\'smart-datepicker-changer-focus\': isFocusChanger(changer)}" ' +
             '        ng-repeat="changer in activeChangers">' +
             '       <span ng-if="changers[changer].before" ng-bind="changers[changer].before"></span>' +
             '       <div ng-bind="changers[changer].view()"' +
             '            ng-mousedown="setFocusChanger(changer)"></div>' +
             '   </div>' +
-            '   <div class="smart-datepicker-switch">' +
-            '       <div ng-mousedown="increment()" ng-mouseleave="stopIncrement()" ng-mouseup="stopIncrement()" class="smart-datepicker-increment"></div>' +
-            '       <div ng-mousedown="decrement()" ng-mouseleave="stopDecrement()" ng-mouseup="stopDecrement()" class="smart-datepicker-decrement"></div>' +
+            '   <div class="smart-datepicker-tools">' +
+            '      <div class="smart-datepicker-toggle-calendar"></div>' +
+            '      <div class="smart-datepicker-switch">' +
+            '          <div ng-mousedown="increment()" ng-mouseleave="stopIncrement()" ng-mouseup="stopIncrement()" class="smart-datepicker-increment"></div>' +
+            '          <div ng-mousedown="decrement()" ng-mouseleave="stopDecrement()" ng-mouseup="stopDecrement()" class="smart-datepicker-decrement"></div>' +
+            '      </div>' +
+            '      <div ng-click="clear()" class="smart-datepicker-clear"></div>' +
             '   </div>' +
-            '   <div ng-click="clear()" class="smart-datepicker-clear">&times;</div>' +
             '</div>',
             link: function ($scope) {
                 var step = 86400;
@@ -323,7 +326,7 @@ angular.module('smartDatepicker', [])
                             var currentStep = Number(
                                     (Number((step).toFixed(3)) - Math.floor(step))
                                         .toFixed(3)) * 1000;
-                            return (1000 % currentStep) ? 1 : currentStep;
+                            return (!currentStep || (1000 % currentStep) || ((1000 / currentStep) < 2)) ? 1 : currentStep;
                         },
                         view: function () {
                             if (this.current != null) {
@@ -355,7 +358,7 @@ angular.module('smartDatepicker', [])
 
                 $scope.$watch('step', function (newStep) {
                     $scope.activeChangers = ['day', 'month', 'year'];
-                    step = (angular.isNumber(newStep) && (newStep >= 0.001)) ? newStep : 86400;
+                    step = angular.isNumber(newStep) ? newStep : 86400;
                     if (Math.floor(step) !== step) {
                         $scope.activeChangers.push('hour');
                         $scope.activeChangers.push('minute');
