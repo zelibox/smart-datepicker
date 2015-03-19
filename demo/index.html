@@ -18,12 +18,15 @@
         </div>
     </header>
     <div class="container content">
-        <input type="number" ng-model="step" step=".001"/>
+        step: <input type="number" ng-model="step" step=".001"/>
+        <hr/>
         <smart-datepicker step="step"></smart-datepicker>
         <br/>
+        <input type="datetime-local" step="{{step}}"/>
         <br/>
         <br/>
-        <input type="datetime-local" step="0.001"/>
+        <br/>
+
         <br/>
         <input type="date"/><br/>
         <input type="time"/>

@@ -25,28 +25,10 @@ angular.module('smartDatepicker', [])
             '</div>',
             link: function ($scope) {
                 var step = 86400;
-                $scope.$watch('step', function (newStep) {
-                    $scope.activeChangers = ['day', 'month', 'year'];
-                    step = (angular.isNumber(newStep) && (newStep >= 0.001)) ? newStep : 86400;
-                    if (Math.floor(step) !== step) {
-                        $scope.activeChangers.push('hour');
-                        $scope.activeChangers.push('minute');
-                        $scope.activeChangers.push('second');
-                        $scope.activeChangers.push('millisecond')
-                    } else if (step % 60) {
-                        $scope.activeChangers.push('hour');
-                        $scope.activeChangers.push('minute');
-                        $scope.activeChangers.push('second');
-                    } else if ((step % 3600) || (step % 86400)) {
-                        $scope.activeChangers.push('hour');
-                        $scope.activeChangers.push('minute');
-                    }
-                });
                 var isFocus = false;
-                $scope.activeChangers = [];
-
                 var changer = null;
                 var firstContact = true;
+                $scope.activeChangers = [];
                 $scope.changers = {
                     day: {
                         onUp: function () {
@@ -186,18 +168,22 @@ angular.module('smartDatepicker', [])
                     },
                     hour: {
                         onUp: function () {
-                            if ((this.current === null) || (this.current === 23)) {
+                            if (((this.current + this.step()) > 23) || (this.current === null)) {
                                 this.current = 0;
                             } else {
-                                this.current += 1;
+                                this.current += this.step();
                             }
                         },
                         onDown: function () {
-                            if ((this.current === null) || (this.current === 0)) {
-                                this.current = 23;
+                            if (((this.current - this.step()) < 0) || (this.current === null)) {
+                                this.current = 24 - this.step();
                             } else {
-                                this.current -= 1;
+                                this.current -= this.step();
                             }
+                        },
+                        step: function () {
+                            var currentStep = Math.floor(step);
+                            return (!currentStep || (86400 % currentStep) || (currentStep % 3600) || ((86400 / currentStep) < 2)) ? 1 : currentStep/3600;
                         },
                         view: function () {
                             if (this.current !== null) {
@@ -228,18 +214,22 @@ angular.module('smartDatepicker', [])
                     },
                     minute: {
                         onUp: function () {
-                            if ((this.current === null) || (this.current === 59)) {
+                            if (((this.current + this.step()) > 59) || (this.current === null)) {
                                 this.current = 0;
                             } else {
-                                this.current += 1;
+                                this.current += this.step();
                             }
                         },
                         onDown: function () {
-                            if ((this.current === null) || (this.current === 0)) {
-                                this.current = 59;
+                            if (((this.current - this.step()) < 0) || (this.current === null)) {
+                                this.current = 60 - this.step();
                             } else {
-                                this.current -= 1;
+                                this.current -= this.step();
                             }
+                        },
+                        step: function () {
+                            var currentStep = Math.floor(step);
+                            return (!currentStep || (3600 % currentStep) || (currentStep % 60) || ((3600 / currentStep) < 2)) ? 1 : currentStep/60;
                         },
                         view: function () {
                             if (this.current !== null) {
@@ -270,18 +260,22 @@ angular.module('smartDatepicker', [])
                     },
                     second: {
                         onUp: function () {
-                            if ((this.current === null) || (this.current === 59)) {
+                            if (((this.current + this.step()) > 59) || (this.current === null)) {
                                 this.current = 0;
                             } else {
-                                this.current += 1;
+                                this.current += this.step();
                             }
                         },
                         onDown: function () {
-                            if ((this.current === null) || (this.current === 0)) {
-                                this.current = 59;
+                            if (((this.current - this.step()) < 0) || (this.current === null)) {
+                                this.current = 60 - this.step();
                             } else {
-                                this.current -= 1;
+                                this.current -= this.step();
                             }
+                        },
+                        step: function () {
+                            var currentStep = Math.floor(step);
+                            return (!currentStep || (60 % currentStep) || ((60 / currentStep) < 2)) ? 1 : currentStep;
                         },
                         view: function () {
                             if (this.current !== null) {
@@ -312,18 +306,24 @@ angular.module('smartDatepicker', [])
                     },
                     millisecond: {
                         onUp: function () {
-                            if (((this.current + 1) > 999)) {
+                            if (((this.current + this.step()) > 999) || (this.current === null)) {
                                 this.current = 0;
                             } else {
-                                this.current += 1;
+                                this.current += this.step();
                             }
                         },
                         onDown: function () {
-                            if (((this.current - 1) < 0)) {
-                                this.current = 999;
+                            if (((this.current - this.step()) < 0) || (this.current === null)) {
+                                this.current = 1000 - this.step();
                             } else {
-                                this.current -= 1;
+                                this.current -= this.step();
                             }
+                        },
+                        step: function () {
+                            var currentStep = Number(
+                                    (Number((step).toFixed(3)) - Math.floor(step))
+                                        .toFixed(3)) * 1000;
+                            return (1000 % currentStep) ? 1 : currentStep;
                         },
                         view: function () {
                             if (this.current != null) {
@@ -352,6 +352,24 @@ angular.module('smartDatepicker', [])
                         current: null
                     }
                 };
+
+                $scope.$watch('step', function (newStep) {
+                    $scope.activeChangers = ['day', 'month', 'year'];
+                    step = (angular.isNumber(newStep) && (newStep >= 0.001)) ? newStep : 86400;
+                    if (Math.floor(step) !== step) {
+                        $scope.activeChangers.push('hour');
+                        $scope.activeChangers.push('minute');
+                        $scope.activeChangers.push('second');
+                        $scope.activeChangers.push('millisecond')
+                    } else if (step % 60) {
+                        $scope.activeChangers.push('hour');
+                        $scope.activeChangers.push('minute');
+                        $scope.activeChangers.push('second');
+                    } else if ((step % 3600) || (step % 86400)) {
+                        $scope.activeChangers.push('hour');
+                        $scope.activeChangers.push('minute');
+                    }
+                });
 
                 $scope.setFocusChanger = function (typeChanger) {
                     firstContact = true;
