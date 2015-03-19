@@ -18,7 +18,7 @@ angular.module('smartDatepicker', [])
             '            ng-mousedown="setFocusChanger(changer)"></div>' +
             '   </div>' +
             '   <div class="smart-datepicker-tools">' +
-            '      <div class="smart-datepicker-toggle-calendar"></div>' +
+            '      <div ng-click="toggleCalendar()" class="smart-datepicker-toggle-calendar"></div>' +
             '      <div class="smart-datepicker-switch">' +
             '          <div ng-mousedown="increment()" ng-mouseleave="stopIncrement()" ng-mouseup="stopIncrement()" class="smart-datepicker-increment"></div>' +
             '          <div ng-mousedown="decrement()" ng-mouseleave="stopDecrement()" ng-mouseup="stopDecrement()" class="smart-datepicker-decrement"></div>' +
@@ -544,6 +544,10 @@ angular.module('smartDatepicker', [])
                     }
                 };
 
+                var calendarElement = null;
+                $scope.toggleCalendar = function () {
+
+                };
             }
         }
     });
