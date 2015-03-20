@@ -446,6 +446,7 @@ angular.module('smartDatepicker', [])
                         current: null
                     }
                 };
+
                 $scope.$watch(function () {
 
                     //yyyy-MM-dd HH:mm:ss sss
@@ -458,7 +459,7 @@ angular.module('smartDatepicker', [])
                         ' ' + $scope.changers['millisecond'].view();
                 }, function () {
                     if($scope.model instanceof Date) {
-                        //todo
+                        //todogit rm -r one-of-the-directories
                         $scope.model.setFullYear($scope.changers['year'].current);
                         $scope.model.setDate($scope.changers['day'].current);
                         $scope.model.setMonth($scope.changers['month'].current);
