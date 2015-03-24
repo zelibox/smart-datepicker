@@ -22,7 +22,7 @@
     step: <input type="number" ng-model="step" step=".001"/>
     <hr/>
     <input type="datetime-local" step="{{step}}"/>
-    <smart-datepicker model="date" step="step"></smart-datepicker>
+    <div style="margin-left: 310px;"><smart-datepicker model="date" step="step"></smart-datepicker></div>
     <br/>
     {{ date }}
     <br/>
@@ -31,8 +31,12 @@
     <br/>
     <input type="date"/><br/>
     <input type="time"/>
-    <smart-datepicker model="date2"></smart-datepicker>
+    <div style="margin-right: 100px"><smart-datepicker model="date2"></smart-datepicker></div>
     {{ date2 }}
 </div>
+
+
+
+
 </body>
 </html>
