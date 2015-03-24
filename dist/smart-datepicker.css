@@ -324,7 +324,7 @@
 
 .smart-datepicker-calendar .smart-datepicker-calendar-wrap-month {
     font-size: 0;
-    border: 1px solid #EAEAEA;
+    border: 1px solid #bbb;
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-wrap-month > div {
@@ -340,7 +340,7 @@
 
 .smart-datepicker-calendar .smart-datepicker-calendar-weekday {
     background: #eee;
-    border-bottom: 1px solid #DADADA;
+    border-bottom: 1px solid #bbb;
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-wrap-month > .smart-datepicker-calendar-day {
@@ -366,7 +366,7 @@
 
 .smart-datepicker-calendar .smart-datepicker-calendar-container-year {
     height: 130px;
-    border: 1px solid #DADADA;
+    border: 1px solid #bbb;
     position: relative;
     overflow: hidden;
     margin-top: 1rem;
@@ -374,12 +374,12 @@
 
 .smart-datepicker-calendar .smart-datepicker-calendar-year {
     margin-right: 16px;
-    border: 1px solid #DADADA;
+    border: 1px solid #bbb;
     border-width: 0px 1px 1px 0px;
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-year.smart-datepicker-calendar-year-active .smart-datepicker-calendar-year-header{
-    background: #E5ECF8;
+    background: #BCCDEC;
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-year-header {
@@ -409,9 +409,17 @@
     margin-left: -13px;
 }
 .smart-datepicker-calendar .smart-datepicker-calendar-year-month {
-    width: 33%;
+    width: 25%;
     display: inline-block;
     text-align: center;
     font-size: 12px;
-    line-height: 26px;
+    line-height: 35px;
+}
+
+.smart-datepicker-calendar .smart-datepicker-calendar-year-month:hover {
+    background: #E5ECF8;
+}
+
+.smart-datepicker-calendar .smart-datepicker-calendar-year-month:active {
+    background: #b5d5ff;
 }

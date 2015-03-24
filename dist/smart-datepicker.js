@@ -125,6 +125,7 @@ angular.module('smartDatepicker', [])
                 var isFocus = false;
                 var changer = null;
                 var firstContact = true;
+                $scope.localization = smartDatepickerLocalization;
                 $scope.activeChangers = [];
                 $scope.changers = {
                     day: {
@@ -613,6 +614,7 @@ angular.module('smartDatepicker', [])
                         case 46: // delete
                         case 8: // backspace
                             $scope.changers[changer].current = null;
+                            $scope.setFocusChanger(changer);
                             event.preventDefault();
                             break;
                         case 9: // tab
@@ -693,18 +695,15 @@ angular.module('smartDatepicker', [])
                 $scope.calendarMonth = {
                     calc: function (year, month) {
                         this.year = year;
-                        this.month = {
-                            number: month,
-                            name: smartDatepickerLocalization.getMonth(month).name
-                        };
+                        this.month = month;
 
-                        var countDays = new Date(this.year, this.month.number + 1, 0).getDate();
-                        var startWeekday = new Date(this.year, this.month.number, 1).getDay();
+                        var countDays = new Date(this.year, this.month + 1, 0).getDate();
+                        var startWeekday = new Date(this.year, this.month, 1).getDay();
                         var countPrevDays = ((startWeekday - 1) >= 0) ? (startWeekday - 1) : 6;
                         var days = [];
                         for (var i = 0; i < countPrevDays; i++) {
                             days.push({
-                                number: new Date(this.year, this.month.number + 1, ((countDays + (countPrevDays - i) - 1) * -1)).getDate(),
+                                number: new Date(this.year, this.month + 1, ((countDays + (countPrevDays - i) - 1) * -1)).getDate(),
                                 currentMonth: false,
                                 active: false
                             })
@@ -717,7 +716,7 @@ angular.module('smartDatepicker', [])
                                 active: ($scope.changers['day'].current === i)  //todo
                             });
                         }
-                        var endWeekday = new Date(this.year, this.month.number, countDays).getDay();
+                        var endWeekday = new Date(this.year, this.month, countDays).getDay();
                         var countNextDays = ((7 - endWeekday) < 7) ? (7 - endWeekday) : 0;
                         for (i = 0; i < countNextDays; i++) {
                             days.push({
@@ -808,9 +807,7 @@ angular.module('smartDatepicker', [])
                         i++;
                     });
                     $scope.clickYear = year;
-                    if($scope.model instanceof Date) {
-                        $scope.model.setFullYear(year);
-                    }
+                    $scope.changers.year.current = year;
                 };
 
                 $scope.toggleCalendar = function () {
@@ -825,7 +822,7 @@ angular.module('smartDatepicker', [])
                     $scope.calendarMonth.calc($scope.model.getFullYear(), $scope.model.getMonth());
                     var template = '<div ng-blur="closeCalendar()" tabindex="0" style="top: ' + (posY + $element.height()) + 'px; left: ' + posX + 'px" class="smart-datepicker-calendar">' +
                         '    <div class="smart-datepicker-calendar-header">' +
-                        '        <div class="smart-datepicker-calendar-change-month" ng-bind="calendarMonth.month.name + \' \' + calendarMonth.year"></div>' +
+                        '        <div class="smart-datepicker-calendar-change-month" ng-bind="localization.getMonth(calendarMonth.month).name + \' \' + calendarMonth.year"></div>' +
                         '        <div class="smart-datepicker-calendar-tools">' +
                         '            <div class="smart-datepicker-calendar-prev-month"></div>' +
                         '            <div class="smart-datepicker-calendar-current"></div>' +
@@ -835,8 +832,8 @@ angular.module('smartDatepicker', [])
                         '    <div class="smart-datepicker-calendar-container-year">' +
                         '        <div ng-class="{\'smart-datepicker-calendar-year-active\': isYear(year.number)}" class="smart-datepicker-calendar-year" ng-repeat="year in calendarYears">' +
                         '            <div ng-click="selectYear(year.number)" class="smart-datepicker-calendar-year-header" ng-bind="year.number"></div>' +
-                        '            <div ng-show="isYear(year.number) && (clickYear == year.number)" class="smart-datepicker-calendar-year-months">' +
-                        '                <div ng-bind="yearMonth" ng-repeat="yearMonth in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" class="smart-datepicker-calendar-year-month"></div>' +
+                        '            <div ng-if="isYear(year.number) && (clickYear == year.number)" class="smart-datepicker-calendar-year-months">' +
+                        '                <div ng-bind="localization.getMonth(yearMonth).shortName" ng-repeat="yearMonth in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" class="smart-datepicker-calendar-year-month"></div>' +
                         '            </div>' +
                         '        </div>' +
                         '        <div class="smart-datepicker-calendar-container-year-scroll-holder"></div>' +
