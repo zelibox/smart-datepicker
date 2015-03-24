@@ -361,7 +361,7 @@
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-day.smart-datepicker-calendar-day-active {
-    background: rgb(188, 205, 236);
+    background: #BCCDEC;
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-container-year {
@@ -376,6 +376,10 @@
     margin-right: 16px;
     border: 1px solid #DADADA;
     border-width: 0px 1px 1px 0px;
+}
+
+.smart-datepicker-calendar .smart-datepicker-calendar-year.smart-datepicker-calendar-year-active .smart-datepicker-calendar-year-header{
+    background: #E5ECF8;
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-year-header {
@@ -403,4 +407,11 @@
     margin-top: -13px;
     left: 100%;
     margin-left: -13px;
+}
+.smart-datepicker-calendar .smart-datepicker-calendar-year-month {
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    font-size: 12px;
+    line-height: 28px;
 }
