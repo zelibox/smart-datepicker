@@ -772,6 +772,7 @@ angular.module('smartDatepicker', [])
                     })(pr));
                     $document.on('mousemove', mousemoveResize);
                     $document.on('mouseup', mouseupResize);
+                    $scope.clickYear = null;
                 };
                 function mousemoveResize(event) {
                     var y = event.screenY - startY;
@@ -800,6 +801,18 @@ angular.module('smartDatepicker', [])
                     }
                     return false;
                 };
+                $scope.selectYear = function (year) {
+                    var i = 0;
+                    angular.forEach($scope.calendarYears, function (y) {
+                        y.number = year + i;
+                        i++;
+                    });
+                    $scope.clickYear = year;
+                    if($scope.model instanceof Date) {
+                        $scope.model.setFullYear(year);
+                    }
+                };
+
                 $scope.toggleCalendar = function () {
                     if (calendarElement) {
                         $scope.closeCalendar();
@@ -821,8 +834,8 @@ angular.module('smartDatepicker', [])
                         '    </div>' +
                         '    <div class="smart-datepicker-calendar-container-year">' +
                         '        <div ng-class="{\'smart-datepicker-calendar-year-active\': isYear(year.number)}" class="smart-datepicker-calendar-year" ng-repeat="year in calendarYears">' +
-                        '            <div class="smart-datepicker-calendar-year-header" ng-bind="year.number"></div>' +
-                        '            <div ng-if="isYear(year.number)" class="smart-datepicker-calendar-year-months">' +
+                        '            <div ng-click="selectYear(year.number)" class="smart-datepicker-calendar-year-header" ng-bind="year.number"></div>' +
+                        '            <div ng-show="isYear(year.number) && (clickYear == year.number)" class="smart-datepicker-calendar-year-months">' +
                         '                <div ng-bind="yearMonth" ng-repeat="yearMonth in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" class="smart-datepicker-calendar-year-month"></div>' +
                         '            </div>' +
                         '        </div>' +
@@ -842,6 +855,7 @@ angular.module('smartDatepicker', [])
                     calendarElement = angular.element(template);
                     calendarElement.find('.smart-datepicker-calendar-container-year').on('mousewheel DOMMouseScroll', function (event) {
                         event.preventDefault();
+                        $scope.clickYear = null;
                         if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
                             console.log('up');
                             angular.forEach($scope.calendarYears, function (year) {
