@@ -196,6 +196,19 @@
 .smart-datepicker-calendar .smart-datepicker-calendar-header {
     height: 27px;
     line-height: 27px;
+    position: relative;
+}
+
+.smart-datepicker-calendar .smart-datepicker-calendar-header.smart-datepicker-calendar-header-disabled {
+    opacity: 0.5;
+}
+
+.smart-datepicker-calendar .smart-datepicker-calendar-header-dimmer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .smart-datepicker-calendar .smart-datepicker-calendar-change-month {
