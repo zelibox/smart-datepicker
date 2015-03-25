@@ -2,33 +2,40 @@ angular.module('smartDatepicker', [])
     .provider('smartDatepickerLocalization', function () {
         var localization = {
             changers: {
-                day: {
-                    placeholder: 'dd',
-                    before: ''
-                },
                 month: {
                     placeholder: 'mm',
-                    before: '.'
+                    before: '',
+                    sort: 1
+                },
+                day: {
+                    placeholder: 'dd',
+                    before: '/',
+                    sort: 2
                 },
                 year: {
                     placeholder: 'yyyy',
-                    before: '.'
+                    before: '/',
+                    sort: 3
                 },
                 hour: {
                     placeholder: '--',
-                    before: ''
+                    before: '',
+                    sort: 4
                 },
                 minute: {
                     placeholder: '--',
-                    before: ':'
+                    before: ':',
+                    sort: 5
                 },
                 second: {
                     placeholder: '--',
-                    before: ':'
+                    before: ':',
+                    sort: 6
                 },
                 millisecond: {
                     placeholder: '---',
-                    before: ','
+                    before: ',',
+                    sort: 7
                 }
             },
             months: [
@@ -91,7 +98,7 @@ angular.module('smartDatepicker', [])
                 getMonth: function (number) {
                     return localization.months[number]
                 },
-                getDays: function() {
+                getDays: function () {
                     return localization.days;
                 }
             }
@@ -489,21 +496,26 @@ angular.module('smartDatepicker', [])
                 });
 
                 $scope.$watch('step', function (newStep) {
-                    $scope.activeChangers = ['day', 'month', 'year'];
+                    var activeChangers = ['day', 'month', 'year'];
                     step = angular.isNumber(newStep) ? newStep : 86400;
                     if (Math.floor(step) !== step) {
-                        $scope.activeChangers.push('hour');
-                        $scope.activeChangers.push('minute');
-                        $scope.activeChangers.push('second');
-                        $scope.activeChangers.push('millisecond')
+                        activeChangers.push('hour');
+                        activeChangers.push('minute');
+                        activeChangers.push('second');
+                        activeChangers.push('millisecond')
                     } else if (step % 60) {
-                        $scope.activeChangers.push('hour');
-                        $scope.activeChangers.push('minute');
-                        $scope.activeChangers.push('second');
+                        activeChangers.push('hour');
+                        activeChangers.push('minute');
+                        activeChangers.push('second');
                     } else if ((step % 3600) || (step % 86400)) {
-                        $scope.activeChangers.push('hour');
-                        $scope.activeChangers.push('minute');
+                        activeChangers.push('hour');
+                        activeChangers.push('minute');
                     }
+                    console.log(activeChangers);
+                    $scope.activeChangers = $filter('orderBy')(activeChangers, function (typeChanger) {
+                        return smartDatepickerLocalization.getChanger(typeChanger).sort;
+                    });
+                    console.log($scope.activeChangers);
                 });
 
                 $scope.setFocusChanger = function (typeChanger) {
@@ -724,9 +736,9 @@ angular.module('smartDatepicker', [])
                                 currentMonth: true,
                                 currentDay: false,
                                 active: (
-                                    ($scope.changers['day'].current === i) &&
-                                    ($scope.changers['month'].current === (this.month + 1)) &&
-                                    ($scope.changers['year'].current === this.year)
+                                ($scope.changers['day'].current === i) &&
+                                ($scope.changers['month'].current === (this.month + 1)) &&
+                                ($scope.changers['year'].current === this.year)
                                 ),
                                 dayMonth: this.month,
                                 dayYear: this.year
@@ -752,8 +764,8 @@ angular.module('smartDatepicker', [])
                 };
                 $scope.closeCalendar = function () {
                     if (calendarElement) {
-                         calendarElement.remove();
-                         calendarElement = null;
+                        calendarElement.remove();
+                        calendarElement = null;
                     }
                 };
                 var startY = 0;
@@ -761,6 +773,7 @@ angular.module('smartDatepicker', [])
                 var pr = 0;
                 var isScroll = false;
                 var timeout = null;
+
                 function scroll() {
                     if (isScroll) {
                         if (pr > 50) {
@@ -805,8 +818,9 @@ angular.module('smartDatepicker', [])
                     calendarElement.find('.smart-datepicker-calendar-container-year-scroll-holder').css('top', pr + '%');
                     $scope.$apply();
                 }
+
                 function mouseupResize() {
-                    if(timeout) {
+                    if (timeout) {
                         $timeout.cancel(timeout);
                     }
                     pr = 0;
@@ -816,8 +830,9 @@ angular.module('smartDatepicker', [])
                     calendarElement.find('.smart-datepicker-calendar-container-year-scroll-holder').attr('style', '');
                     $scope.$apply();
                 }
+
                 $scope.isYear = function (year) {
-                    if($scope.model instanceof Date) {
+                    if ($scope.model instanceof Date) {
                         return ($scope.model.getFullYear() === year)
                     }
                     return false;
@@ -832,7 +847,7 @@ angular.module('smartDatepicker', [])
                     //$scope.calendarMonth.year = year;
                     //$scope.changers.year.current = year;
                 };
-                $scope.selectMonth = function(year, month) {
+                $scope.selectMonth = function (year, month) {
                     $scope.selectYear(year);
                     $scope.calendarMonth.month = month;
                     //$scope.changers.month.current = (month + 1);
