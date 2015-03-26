@@ -608,6 +608,19 @@ angular.module('smartDatepicker', [])
                     countDecrementInterval = 0;
                 };
 
+                $element.on('mousewheel DOMMouseScroll', function (event) {
+                    if (isFocus) {
+                        event.preventDefault();
+                        $scope.clickYear = null;
+                        if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+                            $scope.changers[changer].onUp();
+                        }
+                        else {
+                            $scope.changers[changer].onDown();
+                        }
+                        $scope.$apply();
+                    }
+                });
                 $scope.keydown = function (event) {
                     switch (event.which) {
                         case 38: // up
