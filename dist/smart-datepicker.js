@@ -115,7 +115,7 @@ angular.module('smartDatepicker', [])
                 model: '='
             },
             template: '<div ng-keydown="keydown($event)" tabindex="0" ng-class="{\'smart-datepicker-empty\': isEmpty()}" class="smart-datepicker">' +
-            '   <div class="smart-datepicker-changer {{ \'smart-datepicker-changer-\' + changer }}"  ' +
+            '   <div class="smart-datepicker-changer {{\'smart-datepicker-changer-\' + changer}}"  ' +
             '        ng-class="{\'smart-datepicker-changer-focus\': isFocusChanger(changer)}" ' +
             '        ng-repeat="changer in activeChangers">' +
             '       <span ng-if="changers[changer].before" ng-bind="changers[changer].before"></span>' +
