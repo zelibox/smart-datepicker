@@ -822,7 +822,8 @@ angular.module('smartDatepicker', [])
                 $scope.scrollYear = function (event) {
                     event.preventDefault();
                     startY = event.screenY;
-                    pr = startPr = (event.offsetY / (128 / 100));
+                    pr = startPr = ((event.offsetY || event.clientY - angular.element(event.target).offset().top) / (128 / 100));
+
                     isScroll = true;
                     calendarElement.find('.smart-datepicker-calendar-container-year-scroll-holder').css('top', startPr + '%');
                     timeout = $timeout(scroll, (function (prr) {
