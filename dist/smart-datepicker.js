@@ -114,19 +114,19 @@ angular.module('smartDatepicker', [])
                 step: '=',
                 model: '='
             },
-            template: '<div ng-focus="focus()" ng-blur="blur()" ng-keydown="keydown($event)" tabindex="0" ng-class="{\'smart-datepicker-empty\': isEmpty()}" class="smart-datepicker">' +
+            template: '<div ng-keydown="keydown($event)" tabindex="0" ng-class="{\'smart-datepicker-empty\': isEmpty()}" class="smart-datepicker">' +
             '   <div class="smart-datepicker-changer {{ \'smart-datepicker-changer-\' + changer }}"  ' +
             '        ng-class="{\'smart-datepicker-changer-focus\': isFocusChanger(changer)}" ' +
             '        ng-repeat="changer in activeChangers">' +
             '       <span ng-if="changers[changer].before" ng-bind="changers[changer].before"></span>' +
             '       <div ng-bind="changers[changer].view()"' +
-            '            ng-mousedown="setFocusChanger(changer)"></div>' +
+            '            ng-mousedown="setFocusChanger(changer, $event)"></div>' +
             '   </div>' +
             '   <div class="smart-datepicker-tools">' +
             '      <div ng-click="toggleCalendar()" class="smart-datepicker-toggle-calendar"></div>' +
             '      <div class="smart-datepicker-switch">' +
-            '          <div ng-mousedown="increment()" ng-mouseleave="stopIncrement()" ng-mouseup="stopIncrement()" class="smart-datepicker-increment"></div>' +
-            '          <div ng-mousedown="decrement()" ng-mouseleave="stopDecrement()" ng-mouseup="stopDecrement()" class="smart-datepicker-decrement"></div>' +
+            '          <div ng-mousedown="increment($event)" ng-mouseleave="stopIncrement()" ng-mouseup="stopIncrement()" class="smart-datepicker-increment"></div>' +
+            '          <div ng-mousedown="decrement($event)" ng-mouseleave="stopDecrement()" ng-mouseup="stopDecrement()" class="smart-datepicker-decrement"></div>' +
             '      </div>' +
             '      <div ng-click="clear()" class="smart-datepicker-clear"></div>' +
             '   </div>' +
@@ -527,25 +527,18 @@ angular.module('smartDatepicker', [])
                     });
                 });
 
-                $scope.setFocusChanger = function (typeChanger) {
+                $scope.setFocusChanger = function (typeChanger, event) {
+                    if(event && isFocus) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                    }
                     firstContact = true;
                     changer = typeChanger;
+                    $timeout(function(){$scope.$apply();})
                 };
 
                 $scope.isFocusChanger = function (typeChanger) {
                     return changer === typeChanger;
-                };
-
-                $scope.focus = function () {
-                    isFocus = true;
-                    if (!changer) {
-                        $scope.setFocusChanger($scope.activeChangers[0]);
-                    }
-                };
-
-                $scope.blur = function () {
-                    isFocus = false;
-                    $scope.setFocusChanger(null);
                 };
 
                 $scope.clear = function () {
@@ -566,8 +559,9 @@ angular.module('smartDatepicker', [])
 
                 var incrementInterval = null;
                 var countIncrementInterval = 0;
-                $scope.increment = function () {
-                    $scope.focus();
+                $scope.increment = function (event) {
+                    event.preventDefault();
+                    focus();
                     $scope.changers[changer].onUp();
                     incrementInterval = $interval(function () {
                         if (!changer) {
@@ -588,8 +582,9 @@ angular.module('smartDatepicker', [])
 
                 var decrementInterval = null;
                 var countDecrementInterval = 0;
-                $scope.decrement = function () {
-                    $scope.focus();
+                $scope.decrement = function (event){
+                    event.preventDefault();
+                    focus();
                     $scope.changers[changer].onDown();
                     decrementInterval = $interval(function () {
                         if (!changer) {
@@ -607,6 +602,21 @@ angular.module('smartDatepicker', [])
                     incrementInterval = null;
                     countDecrementInterval = 0;
                 };
+
+                function focus(){
+                    isFocus = true;
+                    if (!changer) {
+                        $scope.setFocusChanger($scope.activeChangers[0]);
+                    }
+                }
+                $element.on('focusin', function() {
+                    focus();
+                });
+
+                $element.on('focusout', function() {
+                    isFocus = false;
+                    $scope.setFocusChanger(null);
+                });
 
                 $element.on('mousewheel DOMMouseScroll', function (event) {
                     if (isFocus) {
@@ -820,11 +830,11 @@ angular.module('smartDatepicker', [])
                         prr = (prr === 50) ? 51 : prr;
                         return (600 / ((prr > 50) ? (prr - 50) : (50 - prr)));
                     })(pr));
-                    $document.on('mousemove', mousemoveResize);
-                    $document.on('mouseup', mouseupResize);
+                    $document.on('mousemove', mousemoveYearScroll);
+                    $document.on('mouseup', mouseupYearScroll);
                     $scope.clickYear = null;
                 };
-                function mousemoveResize(event) {
+                function mousemoveYearScroll(event) {
                     var y = event.screenY - startY;
                     if (y > 0) {
                         pr = (((y / (128 / 100)) + startPr) <= 100) ? ((y / (128 / 100)) + startPr) : 100;
@@ -835,14 +845,14 @@ angular.module('smartDatepicker', [])
                     $scope.$apply();
                 }
 
-                function mouseupResize() {
+                function mouseupYearScroll() {
                     if (timeout) {
                         $timeout.cancel(timeout);
                     }
                     pr = 0;
                     isScroll = false;
-                    $document.off('mousemove', mousemoveResize);
-                    $document.off('mouseup', mouseupResize);
+                    $document.off('mousemove', mousemoveYearScroll);
+                    $document.off('mouseup', mouseupYearScroll);
                     calendarElement.find('.smart-datepicker-calendar-container-year-scroll-holder').attr('style', '');
                     $scope.$apply();
                 }
@@ -887,7 +897,7 @@ angular.module('smartDatepicker', [])
                     var posY = offset.top;
                     var posX = offset.left;
                     $scope.calendarMonth.calc($scope.model.getFullYear(), $scope.model.getMonth());
-                    var template = '<div ng-blur="closeCalendar()" tabindex="0" style="top: ' + (posY + $element.height()) + 'px; left: ' + posX + 'px" class="smart-datepicker-calendar">' +
+                    var template = '<div tabindex="0" style="top: ' + (posY + $element.height()) + 'px; left: ' + posX + 'px" class="smart-datepicker-calendar">' +
                         '    <div ng-class="{\'smart-datepicker-calendar-header-disabled\': isShowContainerYear}" class="smart-datepicker-calendar-header">' +
                         '        <div ng-click="isShowContainerYear = true" class="smart-datepicker-calendar-change-month" ng-bind="localization.getMonth(calendarMonth.month).name + \' \' + calendarMonth.year"></div>' +
                         '        <div class="smart-datepicker-calendar-tools">' +
@@ -919,6 +929,13 @@ angular.module('smartDatepicker', [])
                         '    </div>' +
                         '</div>';
                     calendarElement = angular.element(template);
+                    calendarElement.on('focusout', function() {
+                        $scope.closeCalendar();
+                        $scope.$apply();
+                    });
+                    calendarElement.on('mousedown', function(event){
+                        event.preventDefault();
+                    });
                     calendarElement.find('.smart-datepicker-calendar-container-year').on('mousewheel DOMMouseScroll', function (event) {
                         event.preventDefault();
                         $scope.clickYear = null;
