@@ -766,7 +766,9 @@ angular.module('smartDatepicker', [])
                         $scope.calcCalendarYears(new Date());
                     } else {
                         var i;
-                        if (date.getFullYear() >= 3) {
+                        if (date.getFullYear() > 9997) {
+                            i = 9995;
+                        } else if (date.getFullYear() >= 3) {
                             i = date.getFullYear() - 2;
                         } else {
                             i = 1;
