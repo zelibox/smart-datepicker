@@ -907,7 +907,6 @@ angular.module('smartDatepicker', [])
                 $scope.selectMonth = function (year, month) {
                     $scope.selectYear(year);
                     $scope.calendarMonth.month = month;
-                    //$scope.changers.month.current = (month + 1);
                     $scope.calendarMonth.calc(year, month);
                     $scope.isShowContainerYear = false;
                 };
