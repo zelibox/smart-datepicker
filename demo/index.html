@@ -21,18 +21,17 @@
 <div class="container content">
     step: <input type="number" ng-model="step" step=".001"/>
     <hr/>
-    <input type="datetime-local" step="{{step}}"/>
-    <smart-datepicker style="margin-left: 30px" model="date" step="step"></smart-datepicker>
-    <br/>
-    {{ date }}
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <input type="date"/><br/>
-    <input type="time"/>
-    <div style="margin-right: 100px"><smart-datepicker model="date2"></smart-datepicker></div>
-    {{ date2 }}
+    <h3>stDate</h3>
+    <input type="datetime-local" ng-model="stDate" step="{{step}}"/>
+    <pre ng-bind="stDate | json"></pre>
+    <hr/>
+    <h3>date1</h3>
+    <smart-datepicker model="date1" step="step"></smart-datepicker>
+    <pre ng-bind="date1 | json"></pre>
+    <hr/>
+    <h3>date2</h3>
+    <smart-datepicker model="date2"></smart-datepicker>
+    <pre ng-bind="date2 | json"></pre>
 </div>
 
 
