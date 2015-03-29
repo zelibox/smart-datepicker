@@ -919,7 +919,7 @@ angular.module('smartDatepicker', [])
                 };
 
                 $scope.calendarPrevMonth = function () {
-                    var prevDate = newDate($scope.calendarMonth.year, $scope.calendarMonth.month);
+                    var prevDate = newDate($scope.calendarMonth.year, $scope.calendarMonth.month, 1);
                     prevDate.setMonth($scope.calendarMonth.month - 1);
                     $scope.selectMonth(prevDate.getFullYear(), prevDate.getMonth());
                 };
@@ -928,7 +928,7 @@ angular.module('smartDatepicker', [])
                     $scope.selectDay(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate())
                 };
                 $scope.calendarNextMonth = function () {
-                    var nextDate = newDate($scope.calendarMonth.year, $scope.calendarMonth.month);
+                    var nextDate = newDate($scope.calendarMonth.year, $scope.calendarMonth.month, 1);
                     nextDate.setMonth($scope.calendarMonth.month + 1);
                     $scope.selectMonth(nextDate.getFullYear(), nextDate.getMonth());
                 };
