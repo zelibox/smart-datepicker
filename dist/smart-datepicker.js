@@ -90,6 +90,9 @@ angular.module('smartDatepicker', [])
             ],
             days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         };
+        this.setLocalization = function (local) {
+            localization = local;
+        };
         this.$get = function () {
             return {
                 getChanger: function (typeChanger) {
