@@ -473,7 +473,7 @@ angular.module('smartDatepicker', [])
                     return date;
                 }
 
-                (function () {
+                $scope.$watch('model', function() {
                     if ($scope.model instanceof Date) {
                         $scope.changers['year'].current = $scope.model.getFullYear();
                         $scope.changers['day'].current = $scope.model.getDate();
@@ -483,7 +483,8 @@ angular.module('smartDatepicker', [])
                         $scope.changers['second'].current = $scope.model.getSeconds();
                         $scope.changers['millisecond'].current = $scope.model.getMilliseconds();
                     }
-                })();
+                });
+
                 var firstWatch = true;
                 $scope.$watch(function () {
                     //yyyy-MM-dd HH:mm:ss sss
