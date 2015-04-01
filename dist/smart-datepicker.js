@@ -475,7 +475,7 @@ angular.module('smartDatepicker', [])
                     }
                     return date;
                 }
-
+                var isClearChanger = false;
                 $scope.$watch('model', function() {
                     if ($scope.model instanceof Date) {
                         $scope.changers['year'].current = $scope.model.getFullYear();
@@ -485,6 +485,13 @@ angular.module('smartDatepicker', [])
                         $scope.changers['minute'].current = $scope.model.getMinutes();
                         $scope.changers['second'].current = $scope.model.getSeconds();
                         $scope.changers['millisecond'].current = $scope.model.getMilliseconds();
+                    } else {
+                        if (!isClearChanger) {
+                            angular.forEach($scope.changers, function(changer) {
+                                changer.current = null;
+                            });
+                        }
+                        isClearChanger = false;
                     }
                 });
 
@@ -686,6 +693,7 @@ angular.module('smartDatepicker', [])
                             break;
                         case 46: // delete
                         case 8: // backspace
+                            isClearChanger = true;
                             $scope.changers[changer].current = null;
                             $scope.setFocusChanger(changer);
                             event.preventDefault();
