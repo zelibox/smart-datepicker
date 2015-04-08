@@ -484,7 +484,7 @@ angular.module('smartDatepicker', [])
                             String($scope.model.getHours()) + '-' +
                             String($scope.model.getMinutes()) + '-' +
                             String($scope.model.getSeconds()) + '-' +
-                            String($scope.model.getMilliseconds);
+                            String($scope.model.getMilliseconds());
                     }
                     return $scope.model;
                 }, function() {
