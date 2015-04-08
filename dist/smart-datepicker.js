@@ -477,7 +477,7 @@ angular.module('smartDatepicker', [])
                 }
 
                 var isClearChanger = false;
-                $scope.$watch(function(){
+                $scope.$watch(function () {
                     if ($scope.model instanceof Date) {
                         return String($scope.model.getFullYear()) + '-' +
                             String($scope.model.getDate()) + '-' +
@@ -540,13 +540,12 @@ angular.module('smartDatepicker', [])
                             $scope.changers['second'].current,
                             $scope.changers['millisecond'].current);
 
-                        if(model.getDate() === $scope.changers['day'].current) {
+                        if (model.getDate() === $scope.changers['day'].current) {
                             $scope.model = model;
                         } else {
                             $scope.model = null;
                             badDate = true;
                         }
-                        //$scope.model = (model.getDate() === $scope.changers['day'].current) ? model : $scope.model;
                     } else {
                         $scope.model = null;
                     }
