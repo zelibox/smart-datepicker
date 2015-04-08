@@ -476,7 +476,18 @@ angular.module('smartDatepicker', [])
                     return date;
                 }
                 var isClearChanger = false;
-                $scope.$watch('model', function() {
+                $scope.$watch(function(){
+                    if ($scope.model instanceof Date) {
+                        return String($scope.model.getFullYear()) + '-' +
+                            String($scope.model.getDate()) + '-' +
+                            String($scope.model.getMonth() + 1) + '-' +
+                            String($scope.model.getHours()) + '-' +
+                            String($scope.model.getMinutes()) + '-' +
+                            String($scope.model.getSeconds()) + '-' +
+                            String($scope.model.getMilliseconds);
+                    }
+                    return $scope.model;
+                }, function() {
                     if ($scope.model instanceof Date) {
                         $scope.changers['year'].current = $scope.model.getFullYear();
                         $scope.changers['day'].current = $scope.model.getDate();
