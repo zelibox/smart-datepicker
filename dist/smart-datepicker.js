@@ -477,7 +477,7 @@ angular.module('smartDatepicker', [])
                 }
 
                 var isClearChanger = false;
-                $scope.$watch(function () {
+                $scope.$watch(function(){
                     if ($scope.model instanceof Date) {
                         return String($scope.model.getFullYear()) + '-' +
                             String($scope.model.getDate()) + '-' +
@@ -530,17 +530,15 @@ angular.module('smartDatepicker', [])
                     });
 
                     if (isAllFill) {
-                        if (!($scope.model instanceof Date)) {
-                            $scope.model = newDate();
-                        }
+                        var model = newDate($scope.changers['year'].current,
+                            ($scope.changers['month'].current - 1),
+                            $scope.changers['day'].current,
+                            $scope.changers['hour'].current,
+                            $scope.changers['minute'].current,
+                            $scope.changers['second'].current,
+                            $scope.changers['millisecond'].current);
 
-                        $scope.model.setFullYear($scope.changers['year'].current);
-                        $scope.model.setDate($scope.changers['day'].current);
-                        $scope.model.setMonth($scope.changers['month'].current - 1);
-                        $scope.model.setHours($scope.changers['hour'].current);
-                        $scope.model.setMinutes($scope.changers['minute'].current);
-                        $scope.model.setSeconds($scope.changers['second'].current);
-                        $scope.model.setMilliseconds($scope.changers['millisecond'].current);
+                        $scope.model = (model.getDate() === $scope.changers['day'].current) ? model : $scope.model;
                     } else {
                         $scope.model = null;
                     }
