@@ -498,16 +498,18 @@ angular.module('smartDatepicker', [])
                         $scope.changers['second'].current = $scope.model.getSeconds();
                         $scope.changers['millisecond'].current = $scope.model.getMilliseconds();
                     } else {
-                        if (!isClearChanger) {
+                        if (!isClearChanger && !badDate) {
                             angular.forEach($scope.changers, function (changer) {
                                 changer.current = null;
                             });
                         }
                         isClearChanger = false;
+                        badDate = false;
                     }
                 });
 
                 var firstWatch = true;
+                var badDate = false;
                 $scope.$watch(function () {
                     //yyyy-MM-dd HH:mm:ss sss
                     return $scope.changers['year'].view() +
@@ -538,7 +540,13 @@ angular.module('smartDatepicker', [])
                             $scope.changers['second'].current,
                             $scope.changers['millisecond'].current);
 
-                        $scope.model = (model.getDate() === $scope.changers['day'].current) ? model : $scope.model;
+                        if(model.getDate() === $scope.changers['day'].current) {
+                            $scope.model = model;
+                        } else {
+                            $scope.model = null;
+                            badDate = true;
+                        }
+                        //$scope.model = (model.getDate() === $scope.changers['day'].current) ? model : $scope.model;
                     } else {
                         $scope.model = null;
                     }
