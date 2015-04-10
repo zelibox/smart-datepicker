@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Smart datepicker</title>
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../dist/smart-datepicker.js"></script>
+    <script src="../dist/smart-datepicker-localization-ru.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="../dist/smart-datepicker.css"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body ng-app="demoApp" ng-controller="demoController">
+<header>
+    <div class="container">
+        <h1>Smart Datepicker</h1>
+
+        <p>Angular module to select the date and time.</p>
+    </div>
+</header>
+<div class="container content">
+    step: <input type="number" ng-model="step" step=".001"/>
+    <hr/>
+    <h3>stDate</h3>
+    <input type="datetime-local" ng-model="date1" step="{{step}}"/>
+    <input type="datetime-local" ng-model="date1" step="{{step}}"/>
+    <pre ng-bind="stDate | json"></pre>
+    <hr/>
+    <h3>date1</h3>
+    <smart-datepicker model="date1" step="step"></smart-datepicker>
+    <smart-datepicker model="date1" step="step"></smart-datepicker>
+    <pre ng-bind="date1 | json"></pre>
+    <hr/>
+    <h3>date2</h3>
+    <smart-datepicker model="date2"></smart-datepicker>
+    <pre ng-bind="date2 | json"></pre>
+</div>
+
+
+
+
+</body>
+</html>
