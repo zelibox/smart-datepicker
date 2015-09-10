@@ -71,7 +71,7 @@ angular.module('smartDatepicker').config(function (smartDatepickerLocalizationPr
                 shortName: 'Авг'
             },
             {
-                name: 'Сетябрь',
+                name: 'Сентябрь',
                 shortName: 'Сен'
             },
             {
