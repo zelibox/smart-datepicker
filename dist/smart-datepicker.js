@@ -467,6 +467,7 @@ angular.module('smartDatepicker', [])
 
                 function newDate(year, month, day, hours, minutes, seconds, milliseconds) {
                     var date = new Date();
+                    date.setDate(1);
                     var setters = ['setFullYear', 'setMonth', 'setDate', 'setHours', 'setMinutes', 'setSeconds', 'setMilliseconds'];
                     for (var i = 0; i <= 6; i++) {
                         if (arguments.length > i) {
