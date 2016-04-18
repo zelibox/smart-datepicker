@@ -122,8 +122,8 @@ angular.module('smartDatepicker', [])
             '        ng-class="{\'smart-datepicker-changer-focus\': isFocusChanger(changer)}" ' +
             '        ng-repeat="changer in activeChangers">' +
             '       <span ng-if="changers[changer].before" ng-bind="changers[changer].before"></span>' +
-            '       <div ng-bind="changers[changer].view()"' +
-            '            ng-mousedown="setFocusChanger(changer, $event)"></div>' +
+            '       <input pattern="[0-9]*" placeholder="{{changers[changer].placeholder}}" ng-model="changers[changer].view()"' +
+            '            ng-mousedown="setFocusChanger(changer, $event)">' +
             '   </div>' +
             '   <div class="smart-datepicker-tools">' +
             '      <div ng-click="toggleCalendar()" class="smart-datepicker-toggle-calendar"></div>' +
@@ -143,16 +143,30 @@ angular.module('smartDatepicker', [])
                 $scope.activeChangers = [];
                 $scope.changers = {
                     day: {
+                        setValidMax: function () {
+                            if (this.current > this.getMax()) {
+                                this.current = this.getMax();
+                            }
+                        },
+                        getMax: function() {
+                            var max;
+                            if ($scope.changers.month.current && $scope.changers.year.current) {
+                                max = (new Date($scope.changers.year.current, $scope.changers.month.current, 0)).getDate();
+                            } else {
+                                max = 31;
+                            }
+                            return max;
+                        },
                         onUp: function () {
-                            if ((this.current === null) || (this.current === 31)) {
+                            if ((this.current === null) || (this.current >= this.getMax())) {
                                 this.current = 1;
                             } else {
                                 this.current += 1;
                             }
                         },
                         onDown: function () {
-                            if ((this.current === null) || (this.current === 1)) {
-                                this.current = 31;
+                            if ((this.current === null) || (this.current == 1)) {
+                                this.current = this.getMax();
                             } else {
                                 this.current -= 1;
                             }
@@ -167,8 +181,8 @@ angular.module('smartDatepicker', [])
                                     return false;
                                 }
                             } else {
-                                if ((this.current + '' + numeric) > 31) {
-                                    this.current = 31;
+                                if ((this.current + '' + numeric) > this.getMax()) {
+                                    this.current = this.getMax();
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
                                 }
@@ -181,7 +195,7 @@ angular.module('smartDatepicker', [])
                             if (this.current) {
                                 return String('00' + (this.current)).slice(-2)
                             }
-                            return this.placeholder;
+                            return null;
                         },
                         before: smartDatepickerLocalization.getChanger('day').before,
                         placeholder: smartDatepickerLocalization.getChanger('day').placeholder,
@@ -194,6 +208,7 @@ angular.module('smartDatepicker', [])
                             } else {
                                 this.current += 1;
                             }
+                            $scope.changers.day.setValidMax();
                         },
                         onDown: function () {
                             if ((this.current === null) || (this.current === 1)) {
@@ -201,6 +216,7 @@ angular.module('smartDatepicker', [])
                             } else {
                                 this.current -= 1;
                             }
+                            $scope.changers.day.setValidMax();
                         },
                         onWrite: function (numeric) {
                             if (!numeric && firstContact) {
@@ -208,6 +224,8 @@ angular.module('smartDatepicker', [])
                             }
                             if (firstContact) {
                                 this.current = numeric;
+                                $scope.changers.day.setValidMax();
+
                                 if (numeric > 1) {
                                     return false;
                                 }
@@ -217,6 +235,7 @@ angular.module('smartDatepicker', [])
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
                                 }
+                                $scope.changers.day.setValidMax();
                                 return false;
                             }
                             firstContact = false;
@@ -226,7 +245,7 @@ angular.module('smartDatepicker', [])
                             if (this.current) {
                                 return String('00' + this.current).slice(-2);
                             }
-                            return this.placeholder;
+                            return null;
                         },
                         before: smartDatepickerLocalization.getChanger('month').before,
                         placeholder: smartDatepickerLocalization.getChanger('month').placeholder,
@@ -240,6 +259,7 @@ angular.module('smartDatepicker', [])
                             } else {
                                 this.current += 1;
                             }
+                            $scope.changers.day.setValidMax();
                         },
                         onDown: function () {
                             if (!this.current || ((this.current - 1) <= 0)) {
@@ -248,12 +268,13 @@ angular.module('smartDatepicker', [])
                             } else {
                                 this.current -= 1;
                             }
+                            $scope.changers.day.setValidMax();
                         },
                         view: function () {
                             if (this.current) {
                                 return String('0000' + (this.current)).slice(-4)
                             }
-                            return this.placeholder;
+                            return null;
                         },
                         onWrite: function (numeric) {
                             if (!numeric && firstContact) {
@@ -267,6 +288,7 @@ angular.module('smartDatepicker', [])
                                 } else {
                                     this.current = Number(this.current + '' + numeric);
                                 }
+                                $scope.changers.day.setValidMax();
                                 if (this.current > 999) {
                                     return false;
                                 }
@@ -301,7 +323,7 @@ angular.module('smartDatepicker', [])
                             if (this.current !== null) {
                                 return String('00' + (this.current)).slice(-2)
                             }
-                            return this.placeholder;
+                            return null;
                         },
                         onWrite: function (numeric) {
                             if (firstContact) {
@@ -347,7 +369,7 @@ angular.module('smartDatepicker', [])
                             if (this.current !== null) {
                                 return String('00' + (this.current)).slice(-2)
                             }
-                            return this.placeholder;
+                            return null;
                         },
                         onWrite: function (numeric) {
                             if (firstContact) {
@@ -393,7 +415,7 @@ angular.module('smartDatepicker', [])
                             if (this.current !== null) {
                                 return String('00' + (this.current)).slice(-2)
                             }
-                            return this.placeholder;
+                            return null;
                         },
                         onWrite: function (numeric) {
                             if (firstContact) {
@@ -441,7 +463,7 @@ angular.module('smartDatepicker', [])
                             if (this.current != null) {
                                 return String('000' + (this.current)).slice(-3)
                             }
-                            return this.placeholder;
+                            return null;
                         },
                         onWrite: function (numeric) {
                             if (firstContact) {
@@ -840,7 +862,7 @@ angular.module('smartDatepicker', [])
                                 dayMonth: this.month,
                                 dayYear: this.year,
                                 isToday: (function () {
-                                    var date = newDate();
+                                    var date = new Date();
                                     return ((date.getFullYear() == year) && (date.getMonth() == month) && (date.getDate() == i))
                                 })()
                             });
@@ -954,7 +976,7 @@ angular.module('smartDatepicker', [])
                     $scope.selectMonth(prevDate.getFullYear(), prevDate.getMonth());
                 };
                 $scope.calendarSetCurrentDay = function () {
-                    var currentDay = newDate();
+                    var currentDay = new Date();
                     $scope.selectDay(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate())
                 };
                 $scope.calendarNextMonth = function () {

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="DemoSmartDatepicker" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo Smart Datepicker</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="dist/smart-datepicker.js"></script>
+    <script src="dist/smart-datepicker-localization-ru.js"></script>
+    <link rel="stylesheet" href="dist/smart-datepicker.css">
+    <script>
+        angular.module('DemoSmartDatepicker', ['smartDatepicker'])
+                .controller('DemoSmartDatepickerController', function ($scope) {
+                    $scope.model1 = null;
+                })
+    </script>
+</head>
+<body ng-controller="DemoSmartDatepickerController">
+<h1>Demo Smart Datepicker</h1>
+<smart-datepicker model="model1"></smart-datepicker>
+<pre ng-bind="model1"></pre>
+<input ng-model="model2" type="date">
+<pre ng-bind="model2"></pre>
+</body>
+</html>
