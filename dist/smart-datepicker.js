@@ -148,7 +148,7 @@ angular.module('smartDatepicker', [])
                                 this.current = this.getMax();
                             }
                         },
-                        getMax: function() {
+                        getMax: function () {
                             var max;
                             if ($scope.changers.month.current && $scope.changers.year.current) {
                                 max = (new Date($scope.changers.year.current, $scope.changers.month.current, 0)).getDate();
@@ -855,9 +855,9 @@ angular.module('smartDatepicker', [])
                                 number: i,
                                 currentMonth: true,
                                 active: (
-                                ($scope.changers['day'].current === i) &&
-                                ($scope.changers['month'].current === (this.month + 1)) &&
-                                ($scope.changers['year'].current === this.year)
+                                    ($scope.changers['day'].current === i) &&
+                                    ($scope.changers['month'].current === (this.month + 1)) &&
+                                    ($scope.changers['year'].current === this.year)
                                 ),
                                 dayMonth: this.month,
                                 dayYear: this.year,
