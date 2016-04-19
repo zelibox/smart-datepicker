@@ -122,7 +122,7 @@ angular.module('smartDatepicker', [])
             '        ng-class="{\'smart-datepicker-changer-focus\': isFocusChanger(changer)}" ' +
             '        ng-repeat="changer in activeChangers">' +
             '       <span ng-if="changers[changer].before" ng-bind="changers[changer].before"></span>' +
-            '       <input pattern="[0-9]*" placeholder="{{changers[changer].placeholder}}" ng-model="changers[changer].view()"' +
+            '       <input pattern="[0-9]*" placeholder="{{changers[changer].placeholder}}" ng-model-options="{getterSetter: true}" ng-model="changers[changer].view"' +
             '            ng-mousedown="setFocusChanger(changer, $event)">' +
             '   </div>' +
             '   <div class="smart-datepicker-tools">' +
