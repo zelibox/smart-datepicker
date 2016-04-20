@@ -117,12 +117,12 @@ angular.module('smartDatepicker', [])
                 step: '=',
                 model: '='
             },
-            template: '<div ng-keydown="keydown($event)" tabindex="0" ng-class="{\'smart-datepicker-empty\': isEmpty()}" class="smart-datepicker">' +
+            template: '<div tabindex="0" ng-keydown="keydown($event)" ng-class="{\'smart-datepicker-empty\': isEmpty()}" class="smart-datepicker">' +
             '   <div class="smart-datepicker-changer {{\'smart-datepicker-changer-\' + changer}}"  ' +
             '        ng-class="{\'smart-datepicker-changer-focus\': isFocusChanger(changer)}" ' +
             '        ng-repeat="changer in activeChangers">' +
             '       <span ng-if="changers[changer].before" ng-bind="changers[changer].before"></span>' +
-            '       <input pattern="[0-9]*" placeholder="{{changers[changer].placeholder}}" ng-model-options="{getterSetter: true}" ng-model="changers[changer].view"' +
+            '       <input tabindex="-1" pattern="[0-9]*" placeholder="{{changers[changer].placeholder}}" ng-model-options="{getterSetter: true}" ng-model="changers[changer].view"' +
             '            ng-mousedown="setFocusChanger(changer, $event)">' +
             '   </div>' +
             '   <div class="smart-datepicker-tools">' +
@@ -1056,12 +1056,17 @@ angular.module('smartDatepicker', [])
                     calendarElement.focus();
                 };
 
-                angular.element('html').on('mousedown', function(event){
+                var windowClick = function(event){
                     if (!angular.element(event.target).closest('.smart-datepicker-calendar').size()) {
-                        console.log(event.target);
                         $scope.closeCalendar();
                         $scope.$apply();
                     }
+                };
+
+                angular.element('html').on('mousedown', windowClick);
+
+                $scope.$on('$destroy', function () {
+                    angular.element('html').off('click', windowClick);
                 });
             }
         }

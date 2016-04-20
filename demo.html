@@ -18,13 +18,14 @@
 </head>
 <body ng-controller="DemoSmartDatepickerController">
 <h1>Demo Smart Datepicker</h1>
-<smart-datepicker model="model1"></smart-datepicker>
-<pre ng-bind="model1"></pre>
+<button ng-init="data = {d1: null, d2: null}" ng-click="notShow = !notShow">toggle</button>
+<smart-datepicker ng-if="!notShow" model="data.d1"></smart-datepicker>
+<pre ng-bind="data.d1"></pre>
 
 <hr>
 
-<smart-datepicker step="60" model="model2"></smart-datepicker>
-<pre ng-bind="model2"></pre>
+<smart-datepicker step="60" model="data.d2"></smart-datepicker>
+<pre ng-bind="data.d1"></pre>
 
 <hr>
 
