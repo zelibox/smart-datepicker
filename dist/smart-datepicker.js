@@ -1036,10 +1036,7 @@ angular.module('smartDatepicker', [])
                         '    </div>' +
                         '</div>';
                     calendarElement = angular.element(template);
-                    calendarElement.on('focusout', function () {
-                        $scope.closeCalendar();
-                        $scope.$apply();
-                    });
+
                     calendarElement.on('mousedown', function (event) {
                         event.preventDefault();
                     });
@@ -1058,6 +1055,14 @@ angular.module('smartDatepicker', [])
                     body.append(calendarElement);
                     calendarElement.focus();
                 };
+
+                angular.element('html').on('mousedown', function(event){
+                    if (!angular.element(event.target).closest('.smart-datepicker-calendar').size()) {
+                        console.log(event.target);
+                        $scope.closeCalendar();
+                        $scope.$apply();
+                    }
+                });
             }
         }
     });
