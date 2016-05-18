@@ -991,8 +991,8 @@ angular.module('smartDatepicker', [])
                     }
                     var body = $document.find('body').eq(0);
                     var offset = $element.offset();
-                    var posY = offset.top;
-                    var posX = offset.left;
+                    var posY = offset.top - angular.element(window).scrollTop();
+                    var posX = offset.left  - angular.element(window).scrollLeft();
                     $scope.clickYear = null;
                     $scope.isShowContainerYear = false;
                     if ($scope.model) {
@@ -1053,11 +1053,10 @@ angular.module('smartDatepicker', [])
                     });
                     $compile(calendarElement)($scope);
                     body.append(calendarElement);
-                    calendarElement.focus();
                 };
 
                 var windowClick = function(event){
-                    if (!angular.element(event.target).closest('.smart-datepicker-calendar').size()) {
+                    if (!angular.element(event.target).closest('.smart-datepicker-calendar').size() && (event.target != $element.find('.smart-datepicker-toggle-calendar')[0])) {
                         $scope.closeCalendar();
                         $scope.$apply();
                     }
@@ -1066,7 +1065,7 @@ angular.module('smartDatepicker', [])
                 angular.element('html').on('mousedown', windowClick);
 
                 $scope.$on('$destroy', function () {
-                    angular.element('html').off('click', windowClick);
+                    angular.element('html').off('mousedown', windowClick);
                 });
             }
         }
