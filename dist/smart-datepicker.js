@@ -991,8 +991,8 @@ angular.module('smartDatepicker', [])
                     }
                     var body = $document.find('body').eq(0);
                     var offset = $element.offset();
-                    var posY = offset.top - angular.element(window).scrollTop();
-                    var posX = offset.left  - angular.element(window).scrollLeft();
+                    var posY = offset.top /*- angular.element(window).scrollTop()*/;
+                    var posX = offset.left  /*- angular.element(window).scrollLeft()*/;
                     $scope.clickYear = null;
                     $scope.isShowContainerYear = false;
                     if ($scope.model) {
